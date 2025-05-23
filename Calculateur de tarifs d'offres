@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Tarifs - Score d'Autorité</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000324;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .brand-green {
+            color: #01FF00;
+        }
+        
+        .bg-brand-green {
+            background-color: #01FF00;
+        }
+        
+        .border-brand-green {
+            border-color: #01FF00;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #9CA3AF;
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: #111827;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #374151;
+        }
+        
+        .card-highlight {
+            border: 2px solid #01FF00;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .flex-between {
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .flex-center {
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 0.5rem;
+            stroke: #01FF00;
+            fill: none;
+            stroke-width: 2;
+        }
+        
+        .score-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #374151;
+            color: #9CA3AF;
+        }
+        
+        .btn:hover {
+            background-color: #4B5563;
+            transform: translateY(-2px);
+        }
+        
+        .btn.active {
+            background-color: #01FF00;
+            color: #000324;
+        }
+        
+        .description-box {
+            background-color: #1F2937;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .description-box p {
+            color: #D1D5DB;
+            font-size: 0.875rem;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .grid-5 {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .grid-5 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .price-display {
+            font-size: 1.875rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .alert {
+            background-color: #111827;
+            border: 1px solid #DC2626;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .alert p {
+            color: #F87171;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+        
+        .alert p:last-child {
+            color: #D1D5DB;
+            margin-bottom: 0;
+        }
+        
+        .tips {
+            background-color: #111827;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border: 1px solid #374151;
+        }
+        
+        .tips ol {
+            list-style: none;
+            color: #D1D5DB;
+        }
+        
+        .tips li {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+        
+        .tips li span:first-child {
+            color: #01FF00;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .tips strong {
+            color: white;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .small-text {
+            font-size: 0.875rem;
+            color: #9CA3AF;
+        }
+        
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="text-center mb-8">
+            <h1 class="brand-green">Calculateur de Tarifs Premium</h1>
+            <p class="subtitle">Détermine tes prix optimaux selon ton niveau d'autorité</p>
+        </div>
+
+        <!-- Score d'autorité -->
+        <div class="card">
+            <div class="flex mb-4">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h2>Ton Score d'Autorité</h2>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex flex-between mb-4">
+                    <span>Score actuel:</span>
+                    <span class="price-display brand-green" id="current-score">1/5</span>
+                </div>
+                
+                <div class="score-buttons">
+                    <button class="btn active" data-score="1" onclick="setScore(1)">1</button>
+                    <button class="btn" data-score="2" onclick="setScore(2)">2</button>
+                    <button class="btn" data-score="3" onclick="setScore(3)">3</button>
+                    <button class="btn" data-score="4" onclick="setScore(4)">4</button>
+                    <button class="btn" data-score="5" onclick="setScore(5)">5</button>
+                </div>
+            </div>
+
+            <!-- Descriptions -->
+            <div class="description-box">
+                <h3 class="flex">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Marque Personnelle
+                </h3>
+                <p id="desc-personnelle">
+                    Aucune marque personnelle en ligne, aucune présence, aucune preuve de résultats clients
+                </p>
+            </div>
+            
+            <div class="description-box">
+                <h3 class="flex">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    Marque d'Entreprise
+                </h3>
+                <p id="desc-entreprise">
+                    Méthode peu claire pour présenter ton entreprise et tes méthodes en ligne
+                </p>
+            </div>
+            
+            <div class="description-box">
+                <h3 class="flex">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                    Preuve de Résultats
+                </h3>
+                <p id="desc-resultats">
+                    Quelques résultats clients prouvés, aucune interview vidéo client enregistrée
+                </p>
+            </div>
+        </div>
+
+        <!-- Fréquence de livraison -->
+        <div class="card">
+            <div class="flex mb-4">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <h2>Fréquence des Sessions 1-1</h2>
+            </div>
+            
+            <div class="grid grid-5">
+                <button class="btn" data-freq="aucune" onclick="setFrequence('aucune')">Aucune</button>
+                <button class="btn" data-freq="1x_mois" onclick="setFrequence('1x_mois')">1x/mois</button>
+                <button class="btn active" data-freq="2x_mois" onclick="setFrequence('2x_mois')">2x/mois ✓</button>
+                <button class="btn" data-freq="4x_mois" onclick="setFrequence('4x_mois')">4x/mois</button>
+                <button class="btn" data-freq="hebdo" onclick="setFrequence('hebdo')">Hebdo</button>
+            </div>
+        </div>
+
+        <!-- Résultats des prix -->
+        <div id="prix-container" class="hidden">
+            <div class="grid grid-2 mb-8">
+                <!-- Offre de Validation -->
+                <div class="card">
+                    <h3>Offre de Validation</h3>
+                    <p class="small-text mb-4">Pour tester ton marché et valider ton offre</p>
+                    <div class="flex flex-center mb-4">
+                        <span class="price-display brand-green">€ <span id="prix-validation">-</span></span>
+                    </div>
+                    <p class="text-center small-text">par client / mois</p>
+                </div>
+
+                <!-- Offre Validée -->
+                <div class="card card-highlight">
+                    <h3>Offre Validée</h3>
+                    <p class="small-text mb-4">Prix optimal une fois ton offre prouvée</p>
+                    <div class="flex flex-center mb-4">
+                        <span class="price-display brand-green">€ <span id="prix-valide">-</span></span>
+                    </div>
+                    <p class="text-center small-text">par client / mois</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="alerte-score-1" class="alert hidden">
+            <p>Avec un score d'autorité de 1, tu dois d'abord construire ta présence en ligne avant de pouvoir facturer des prix premium.</p>
+            <p>Concentre-toi sur la création de contenu, l'obtention de témoignages clients et le développement de ta marque personnelle.</p>
+        </div>
+
+        <!-- Conseils -->
+        <div class="tips">
+            <h3 class="mb-4">💡 Pour augmenter tes prix :</h3>
+            <ol>
+                <li>
+                    <span>1.</span>
+                    <span><strong>Augmente ton autorité</strong> (réseaux sociaux + études de cas) - Plus ton score de réputation est élevé, plus tu peux commander des prix élevés</span>
+                </li>
+                <li>
+                    <span>2.</span>
+                    <span><strong>Améliore tes systèmes de coaching</strong> et concentre-toi sur la création de systèmes de livraison nécessitant moins de temps 1-1 = programme entièrement systématisé</span>
+                </li>
+                <li>
+                    <span>3.</span>
+                    <span><strong>Accumule des preuves sociales</strong> - Plus tu as de témoignages vidéo et d'études de cas détaillées, plus tu peux justifier des prix premium</span>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Données complètes avec lower/upper bounds pour validation et validée
+        const descriptions = {
+            1: {
+                personnelle: "Aucune marque personnelle en ligne, aucune présence, aucune preuve de résultats clients",
+                entreprise: "Méthode peu claire pour présenter ton entreprise et tes méthodes en ligne",
+                resultats: "Quelques résultats clients prouvés, aucune interview vidéo client enregistrée"
+            },
+            2: {
+                personnelle: "Marque personnelle établie - Les gens savent pourquoi ils devraient t'écouter en ligne",
+                entreprise: "Méthode peu claire pour présenter ton entreprise et tes méthodes en ligne",
+                resultats: "Résultats clients prouvés répétés, 3+ interviews vidéo clients enregistrées (ou 10 témoignages écrits)"
+            },
+            3: {
+                personnelle: "Marque personnelle prouvée et efficace - 1-2 demandes entrantes par semaine",
+                entreprise: "Marque d'entreprise établie en ligne",
+                resultats: "Résultats clients prouvés répétés, 10+ interviews vidéo clients enregistrées"
+            },
+            4: {
+                personnelle: "Gravitas personnel très efficace (Autorité), top 10 dans ton industrie",
+                entreprise: "Méthode-Gravitas bien reconnue et prouvée (efficacité)",
+                resultats: "Abondance d'études de cas de haute qualité et témoignages"
+            },
+            5: {
+                personnelle: "Top 1-3 dans ton industrie - Files d'attente pour travailler avec toi",
+                entreprise: "La méthode de référence dans l'industrie",
+                resultats: "Résultats extraordinaires et constants - Les clients deviennent des ambassadeurs"
+            }
+        };
+
+        // Prix avec structure complète lower/upper pour validation et validée
+        const prixBase = {
+            1: {
+                validation: { lower: 0, upper: 0 },
+                valide: { lower: 0, upper: 0 },
+                special4x: { lower: 1000, upper: 1400, valide_lower: 2000, valide_upper: 2000 }
+            },
+            2: {
+                validation: { lower: 0, upper: 0 },
+                valide: { lower: 2000, upper: 2000 }
+            },
+            3: {
+                validation: { lower: 1000, upper: 1400 },
+                valide: { lower: 2000, upper: 4000 }
+            },
+            4: {
+                validation: { lower: 2000, upper: 2100 },
+                valide: { lower: 4000, upper: 6000 }
+            },
+            5: {
+                validation: { lower: 4000, upper: 5600 },
+                valide: { lower: 8000, upper: 8000 }
+            }
+        };
+
+        const multiplicateurs = {
+            'aucune': 0.8,
+            '1x_mois': 0.9,
+            '2x_mois': 1,
+            '4x_mois': 1.2,
+            'hebdo': 1.4
+        };
+
+        let scoreActuel = 1;
+        let frequenceActuelle = '2x_mois';
+
+        function setScore(score) {
+            scoreActuel = score;
+            
+            // Mettre à jour les boutons
+            document.querySelectorAll('.btn[data-score]').forEach(btn => {
+                if (btn.dataset.score == score) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Mettre à jour l'affichage
+            document.getElementById('current-score').textContent = score + '/5';
+            document.getElementById('desc-personnelle').textContent = descriptions[score].personnelle;
+            document.getElementById('desc-entreprise').textContent = descriptions[score].entreprise;
+            document.getElementById('desc-resultats').textContent = descriptions[score].resultats;
+            
+            calculerPrix();
+        }
+
+        function setFrequence(freq) {
+            frequenceActuelle = freq;
+            
+            // Mettre à jour les boutons
+            document.querySelectorAll('.btn[data-freq]').forEach(btn => {
+                if (btn.dataset.freq == freq) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            calculerPrix();
+        }
+
+        function calculerPrix() {
+            const score = prixBase[scoreActuel];
+            const multiplicateur = multiplicateurs[frequenceActuelle];
+            
+            let prixValidation, prixValide;
+            
+            // Gestion spéciale pour score 1 avec 4x/mois
+            if (scoreActuel === 1 && frequenceActuelle === '4x_mois' && score.special4x) {
+                prixValidation = {
+                    min: Math.round(score.special4x.lower * multiplicateur),
+                    max: Math.round(score.special4x.upper * multiplicateur)
+                };
+                prixValide = {
+                    min: Math.round(score.special4x.valide_lower * multiplicateur),
+                    max: Math.round(score.special4x.valide_upper * multiplicateur)
+                };
+                
+                document.getElementById('prix-container').classList.remove('hidden');
+                document.getElementById('alerte-score-1').classList.add('hidden');
+            } else if (scoreActuel === 1) {
+                // Autres fréquences pour score 1
+                document.getElementById('prix-container').classList.add('hidden');
+                document.getElementById('alerte-score-1').classList.remove('hidden');
+                return;
+            } else {
+                // Scores 2-5
+                prixValidation = {
+                    min: score.validation.lower > 0 ? 
+                         Math.round(score.validation.lower * multiplicateur) :
+                         Math.round(score.valide.lower * 0.5 * multiplicateur),
+                    max: score.validation.upper > 0 ? 
+                         Math.round(score.validation.upper * multiplicateur) :
+                         Math.round(score.valide.upper * 0.7 * multiplicateur)
+                };
+                
+                prixValide = {
+                    min: Math.round(score.valide.lower * multiplicateur),
+                    max: Math.round(score.valide.upper * multiplicateur)
+                };
+                
+                document.getElementById('prix-container').classList.remove('hidden');
+                document.getElementById('alerte-score-1').classList.add('hidden');
+            }
+            
+            // Afficher les prix
+            if (prixValidation.min === prixValidation.max) {
+                document.getElementById('prix-validation').textContent = 
+                    prixValidation.min.toLocaleString('fr-FR');
+            } else {
+                document.getElementById('prix-validation').textContent = 
+                    prixValidation.min.toLocaleString('fr-FR') + ' - ' + 
+                    prixValidation.max.toLocaleString('fr-FR');
+            }
+            
+            if (prixValide.min === prixValide.max) {
+                document.getElementById('prix-valide').textContent = 
+                    prixValide.min.toLocaleString('fr-FR');
+            } else {
+                document.getElementById('prix-valide').textContent = 
+                    prixValide.min.toLocaleString('fr-FR') + ' - ' + 
+                    prixValide.max.toLocaleString('fr-FR');
+            }
+        }
+
+        // Initialiser
+        calculerPrix();
+    </script>
+</body>
+</html>
