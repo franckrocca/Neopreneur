@@ -50,7 +50,7 @@
         h2 {
             font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            display: inline-block;
         }
         
         h3 {
@@ -71,6 +71,12 @@
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border: 1px solid #374151;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(1, 255, 0, 0.1);
         }
         
         .card-highlight {
@@ -79,6 +85,7 @@
         
         .flex {
             display: flex;
+            align-items: center;
         }
         
         .flex-between {
@@ -88,7 +95,6 @@
         
         .flex-center {
             justify-content: center;
-            align-items: center;
         }
         
         .icon {
@@ -98,6 +104,12 @@
             stroke: #01FF00;
             fill: none;
             stroke-width: 2;
+        }
+        
+        .header-with-icon {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
         }
         
         .score-buttons {
@@ -128,6 +140,17 @@
             color: #000324;
         }
         
+        .btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #1F2937;
+        }
+        
+        .btn.disabled:hover {
+            transform: none;
+            background-color: #1F2937;
+        }
+        
         .description-box {
             background-color: #1F2937;
             border-radius: 0.5rem;
@@ -149,8 +172,12 @@
             grid-template-columns: 1fr 1fr;
         }
         
-        .grid-5 {
-            grid-template-columns: repeat(5, 1fr);
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
             gap: 0.5rem;
         }
         
@@ -158,7 +185,10 @@
             .grid-2 {
                 grid-template-columns: 1fr;
             }
-            .grid-5 {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .grid-4 {
                 grid-template-columns: repeat(2, 1fr);
             }
             h1 {
@@ -170,6 +200,17 @@
             font-size: 1.875rem;
             font-weight: bold;
             margin: 1rem 0;
+            transition: all 0.5s ease;
+        }
+        
+        @keyframes priceChange {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .price-animate {
+            animation: priceChange 0.5s ease;
         }
         
         .alert {
@@ -228,9 +269,325 @@
             color: #9CA3AF;
         }
         
+        .info-text {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        
+        .infinity-icon {
+            color: #01FF00;
+            font-size: 1.5rem;
+            margin-left: 0.25rem;
+        }
+        
         .mb-4 { margin-bottom: 1rem; }
         .mb-6 { margin-bottom: 1.5rem; }
         .mb-8 { margin-bottom: 2rem; }
+        
+        .freq-table {
+            background-color: #1F2937;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .freq-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .freq-table th,
+        .freq-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #374151;
+        }
+        
+        .freq-table th {
+            color: #01FF00;
+            font-weight: 600;
+        }
+        
+        .freq-table td {
+            color: #D1D5DB;
+            font-size: 0.875rem;
+        }
+        
+        .warning-text {
+            color: #FCD34D;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: rgba(252, 211, 77, 0.1);
+            border-radius: 0.375rem;
+            border: 1px solid rgba(252, 211, 77, 0.3);
+        }
+        
+        /* Calculateur de revenus amélioré */
+        .revenue-card {
+            background-color: #111827;
+            border: 2px solid #01FF00;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .revenue-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(1, 255, 0, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+        
+        .slider-container {
+            background-color: #1F2937;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #374151;
+            outline: none;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #01FF00;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(1, 255, 0, 0.5);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #01FF00;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(1, 255, 0, 0.5);
+        }
+        
+        .revenue-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .metric-box {
+            background-color: #1F2937;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            position: relative;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-box:hover {
+            border-color: #01FF00;
+            transform: translateY(-2px);
+        }
+        
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #01FF00;
+            margin: 0.5rem 0;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #9CA3AF;
+        }
+        
+        @media (max-width: 768px) {
+            .revenue-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Mode comparaison */
+        .comparison-section {
+            background-color: #111827;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #374151;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+        
+        .comparison-card {
+            background-color: #1F2937;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        
+        .comparison-arrow {
+            font-size: 2rem;
+            color: #01FF00;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
+        }
+        
+        /* Checklist interactive */
+        .checklist {
+            background-color: #1F2937;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .checklist-item:hover {
+            background-color: rgba(1, 255, 0, 0.1);
+            border-radius: 0.375rem;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.75rem;
+            accent-color: #01FF00;
+        }
+        
+        .checklist-item label {
+            flex: 1;
+            color: #D1D5DB;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+        
+        .checklist-item input:checked + label {
+            text-decoration: line-through;
+            color: #6B7280;
+        }
+        
+        /* Section de partage améliorée */
+        .share-section {
+            background-color: #1F2937;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            background-color: #374151;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .share-btn:hover {
+            background-color: #01FF00;
+            color: #000324;
+            transform: translateY(-2px);
+        }
+        
+        #copy-success {
+            margin-top: 1rem;
+            color: #01FF00;
+            font-size: 0.875rem;
+            padding: 0.5rem;
+            background-color: rgba(1, 255, 0, 0.1);
+            border-radius: 0.375rem;
+            display: none;
+        }
+        
+        /* Optimisation mobile finale */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem 0.5rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            .price-display {
+                font-size: 1.5rem;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
+            
+            .share-btn {
+                width: 100%;
+            }
+            
+            .metric-value {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -243,7 +600,7 @@
 
         <!-- Score d'autorité -->
         <div class="card">
-            <div class="flex mb-4">
+            <div class="header-with-icon">
                 <svg class="icon" viewBox="0 0 24 24">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
@@ -301,23 +658,57 @@
                     Quelques résultats clients prouvés, aucune interview vidéo client enregistrée
                 </p>
             </div>
+
+            <!-- Checklist pour progresser -->
+            <div class="checklist" id="checklist-container" style="display: none;">
+                <h4 class="small-text mb-4" style="color: #01FF00;">✓ Actions pour passer au niveau supérieur :</h4>
+                <div id="checklist-items">
+                    <!-- Les items seront ajoutés dynamiquement -->
+                </div>
+            </div>
         </div>
 
         <!-- Fréquence de livraison -->
         <div class="card">
-            <div class="flex mb-4">
+            <div class="header-with-icon">
                 <svg class="icon" viewBox="0 0 24 24">
                     <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
-                <h2>Fréquence des Sessions 1-1</h2>
+                <h2>Fréquence des Appels 1-1</h2>
             </div>
+            <p class="info-text mb-4">* Le reste de l'accompagnement est en one to many (coaching de groupe)</p>
             
-            <div class="grid grid-5">
-                <button class="btn" data-freq="aucune" onclick="setFrequence('aucune')">Aucune</button>
-                <button class="btn" data-freq="1x_mois" onclick="setFrequence('1x_mois')">1x/mois</button>
-                <button class="btn active" data-freq="2x_mois" onclick="setFrequence('2x_mois')">2x/mois ✓</button>
-                <button class="btn" data-freq="4x_mois" onclick="setFrequence('4x_mois')">4x/mois</button>
-                <button class="btn" data-freq="hebdo" onclick="setFrequence('hebdo')">Hebdo</button>
+            <div class="grid grid-4" id="freq-buttons">
+                <button class="btn" data-freq="aucun" onclick="setFrequence('aucun')">Aucun</button>
+                <button class="btn" data-freq="1x" onclick="setFrequence('1x')">1x par mois</button>
+                <button class="btn active" data-freq="2x" onclick="setFrequence('2x')">2x par mois ✓</button>
+                <button class="btn" data-freq="4x" onclick="setFrequence('4x')">4x par mois</button>
+            </div>
+
+            <div id="freq-warning" class="warning-text hidden">
+                <!-- Message d'avertissement pour les fréquences non disponibles -->
+            </div>
+
+            <!-- Tableau des fréquences recommandées -->
+            <div class="freq-table" id="freq-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type d'offre</th>
+                            <th>Cadence de livraison recommandée</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Offre de Validation</td>
+                            <td id="freq-validation">-</td>
+                        </tr>
+                        <tr>
+                            <td>Offre Validée</td>
+                            <td id="freq-validee">-</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -329,9 +720,9 @@
                     <h3>Offre de Validation</h3>
                     <p class="small-text mb-4">Pour tester ton marché et valider ton offre</p>
                     <div class="flex flex-center mb-4">
-                        <span class="price-display brand-green">€ <span id="prix-validation">-</span></span>
+                        <span class="price-display brand-green" id="prix-validation">-</span>
                     </div>
-                    <p class="text-center small-text">par client / mois</p>
+                    <p class="text-center small-text">par client</p>
                 </div>
 
                 <!-- Offre Validée -->
@@ -339,19 +730,85 @@
                     <h3>Offre Validée</h3>
                     <p class="small-text mb-4">Prix optimal une fois ton offre prouvée</p>
                     <div class="flex flex-center mb-4">
-                        <span class="price-display brand-green">€ <span id="prix-valide">-</span></span>
+                        <span class="price-display brand-green" id="prix-valide">-</span>
                     </div>
-                    <p class="text-center small-text">par client / mois</p>
+                    <p class="text-center small-text">par client</p>
                 </div>
             </div>
         </div>
 
-        <div id="alerte-score-1" class="alert hidden">
-            <p>Avec un score d'autorité de 1, tu dois d'abord construire ta présence en ligne avant de pouvoir facturer des prix premium.</p>
-            <p>Concentre-toi sur la création de contenu, l'obtention de témoignages clients et le développement de ta marque personnelle.</p>
+        <div id="alerte-score" class="alert hidden">
+            <p id="alerte-message">Message d'alerte</p>
         </div>
 
-        <!-- Conseils -->
+        <!-- Mode comparaison -->
+        <div class="comparison-section" id="comparison-section" style="display: none;">
+            <h3 class="mb-4">📈 Potentiel de Progression</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4 class="small-text" style="color: #9CA3AF;">Où tu es maintenant</h4>
+                    <p class="brand-green" style="font-size: 1.25rem; font-weight: bold; margin: 0.5rem 0;" id="current-level">Score 1</p>
+                    <p class="small-text" id="current-price-range">-</p>
+                </div>
+                <div class="comparison-arrow">→</div>
+                <div class="comparison-card" style="border: 2px solid #01FF00;">
+                    <h4 class="small-text" style="color: #01FF00;">Où tu pourrais être</h4>
+                    <p class="brand-green" style="font-size: 1.25rem; font-weight: bold; margin: 0.5rem 0;" id="potential-level">Score 5</p>
+                    <p class="small-text" id="potential-price-range">-</p>
+                    <p class="brand-green" style="font-size: 0.875rem; margin-top: 0.5rem;" id="potential-gain">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculateur de revenus amélioré -->
+        <div class="revenue-card" id="revenue-section" style="display: none;">
+            <h3 class="mb-4">📊 Calculateur de Revenus Potentiels</h3>
+            
+            <div class="slider-container">
+                <div class="slider-label">
+                    <label for="clients-slider">Nombre de clients</label>
+                    <span class="brand-green" style="font-size: 1.5rem; font-weight: bold;" id="nb-clients">5</span>
+                </div>
+                <input type="range" id="clients-slider" class="slider" min="1" max="50" value="5" oninput="updateRevenue()">
+                <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                    <span class="small-text">1</span>
+                    <span class="small-text">25</span>
+                    <span class="small-text">50</span>
+                </div>
+            </div>
+            
+            <div class="revenue-metrics">
+                <div class="metric-box">
+                    <div class="metric-label">Revenus Mensuels</div>
+                    <div class="metric-value" id="monthly-revenue">-</div>
+                    <div class="small-text" style="color: #6B7280;">Récurrents</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Revenus Trimestriels</div>
+                    <div class="metric-value" id="quarterly-revenue">-</div>
+                    <div class="small-text" style="color: #6B7280;">x3 mois</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Revenus Annuels</div>
+                    <div class="metric-value" id="yearly-revenue">-</div>
+                    <div class="small-text" style="color: #6B7280;">Projection</div>
+                </div>
+            </div>
+            
+            <!-- Objectif de revenus -->
+            <div class="slider-container" style="margin-top: 1.5rem;">
+                <div class="slider-label">
+                    <label for="goal-slider">Objectif mensuel</label>
+                    <span class="brand-green" id="revenue-goal">10K €</span>
+                </div>
+                <input type="range" id="goal-slider" class="slider" min="5000" max="100000" step="5000" value="10000" oninput="updateGoal()">
+                <div class="text-center" style="margin-top: 1rem;">
+                    <p class="small-text">Tu as besoin de <span class="brand-green" style="font-weight: bold; font-size: 1.125rem;" id="clients-needed">-</span> clients pour atteindre ton objectif</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conseils pour augmenter les prix -->
         <div class="tips">
             <h3 class="mb-4">💡 Pour augmenter tes prix :</h3>
             <ol>
@@ -369,10 +826,137 @@
                 </li>
             </ol>
         </div>
+
+        <!-- Section de partage -->
+        <div class="share-section">
+            <p class="small-text mb-4">Partage ton profil de tarification :</p>
+            <div class="share-buttons">
+                <button class="share-btn" onclick="copyLink()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                    </svg>
+                    Copier le lien
+                </button>
+                <a class="share-btn" id="linkedin-share" href="#" target="_blank">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                    Partager sur LinkedIn
+                </button>
+                <button class="share-btn" onclick="downloadImage()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Télécharger l'image
+                </button>
+            </div>
+            
+            <!-- Message de succès pour la copie -->
+            <div id="copy-success">
+                ✓ Lien copié ! Tu peux maintenant le partager.
+            </div>
+        </div>
     </div>
 
     <script>
-        // Données complètes avec lower/upper bounds pour validation et validée
+        // Données complètes extraites des screenshots (gardant les montants USD mais affichés avec €)
+        const prixData = {
+            1: {
+                'aucun': null,
+                '1x': null,
+                '2x': null,
+                '4x': { 
+                    validation: { lower: 1000, upper: 2800 }, 
+                    valide: { lower: 2000, upper: 4000 }
+                }
+            },
+            2: {
+                'aucun': null,
+                '1x': null,
+                '2x': { 
+                    validation: { lower: 1000, upper: 2800 }, 
+                    valide: { lower: 2000, upper: 4000 }
+                },
+                '4x': { 
+                    validation: { lower: 2000, upper: 4200 }, 
+                    valide: { lower: 4000, upper: 6000 }
+                }
+            },
+            3: {
+                'aucun': { 
+                    validation: { lower: 1000, upper: 2800 }, 
+                    valide: { lower: 2000, upper: 4000 }
+                },
+                '1x': { 
+                    validation: { lower: 2000, upper: 4200 }, 
+                    valide: { lower: 4000, upper: 6000 }
+                },
+                '2x': { 
+                    validation: { lower: 3000, upper: 5600 }, 
+                    valide: { lower: 6000, upper: 8000 }
+                },
+                '4x': { 
+                    validation: { lower: 4000, upper: 7000 }, 
+                    valide: { lower: 8000, upper: 10000 }
+                }
+            },
+            4: {
+                'aucun': { 
+                    validation: { lower: 2000, upper: 5600 }, 
+                    valide: { lower: 4000, upper: 8000 }
+                },
+                '1x': { 
+                    validation: { lower: 3000, upper: 7000 }, 
+                    valide: { lower: 6000, upper: 10000 }
+                },
+                '2x': { 
+                    validation: { lower: 4000, upper: 8400 }, 
+                    valide: { lower: 8000, upper: 12000 }
+                },
+                '4x': { 
+                    validation: { lower: 6000, upper: 16800 }, 
+                    valide: { lower: 12000, upper: 24000 }
+                }
+            },
+            5: {
+                'aucun': { 
+                    validation: { lower: 5000, upper: 10000 }, 
+                    valide: { lower: 10000, upper: 15000 }
+                },
+                '1x': { 
+                    validation: { lower: 7500, upper: 17500 }, 
+                    valide: { lower: 15000, upper: 25000 }
+                },
+                '2x': { 
+                    validation: { lower: 12500, upper: 25000 }, 
+                    valide: { lower: 25000, upper: 35000 }
+                },
+                '4x': { 
+                    validation: { lower: 20000, upper: null }, 
+                    valide: { lower: 40000, upper: null }
+                }
+            }
+        };
+
+        // Libellés de fréquence pour les tableaux (traduction exacte des colonnes F et G)
+        const libellesFrequence = {
+            validation: {
+                'aucun': 'Aucun',
+                '1x': '1x par mois',
+                '2x': '2x par mois (plus recommandé)',
+                '4x': '4x par mois'
+            },
+            valide: {
+                'aucun': 'Aucun',
+                '1x': 'Aucun',
+                '2x': '1-2x par mois (plus recommandé)',
+                '4x': '2-4x par mois'
+            }
+        };
+
         const descriptions = {
             1: {
                 personnelle: "Aucune marque personnelle en ligne, aucune présence, aucune preuve de résultats clients",
@@ -401,41 +985,154 @@
             }
         };
 
-        // Prix avec structure complète lower/upper pour validation et validée
-        const prixBase = {
-            1: {
-                validation: { lower: 0, upper: 0 },
-                valide: { lower: 0, upper: 0 },
-                special4x: { lower: 1000, upper: 1400, valide_lower: 2000, valide_upper: 2000 }
-            },
-            2: {
-                validation: { lower: 0, upper: 0 },
-                valide: { lower: 2000, upper: 2000 }
-            },
-            3: {
-                validation: { lower: 1000, upper: 1400 },
-                valide: { lower: 2000, upper: 4000 }
-            },
-            4: {
-                validation: { lower: 2000, upper: 2100 },
-                valide: { lower: 4000, upper: 6000 }
-            },
-            5: {
-                validation: { lower: 4000, upper: 5600 },
-                valide: { lower: 8000, upper: 8000 }
-            }
-        };
-
-        const multiplicateurs = {
-            'aucune': 0.8,
-            '1x_mois': 0.9,
-            '2x_mois': 1,
-            '4x_mois': 1.2,
-            'hebdo': 1.4
+        // Checklists pour progresser
+        const checklists = {
+            1: [
+                "Créer tes premiers contenus sur LinkedIn (2x/semaine minimum)",
+                "Obtenir ton premier témoignage client écrit",
+                "Définir clairement ton positionnement et ta promesse",
+                "Enregistrer ta première vidéo de présentation",
+                "Documenter ton premier cas client détaillé"
+            ],
+            2: [
+                "Obtenir 3 témoignages vidéo de clients satisfaits",
+                "Publier régulièrement (3-4x/semaine) sur LinkedIn",
+                "Créer une page de vente claire pour ton offre",
+                "Développer ton système de livraison documenté",
+                "Atteindre 1000+ connexions qualifiées"
+            ],
+            3: [
+                "Enregistrer 10+ interviews vidéo de clients",
+                "Devenir une référence reconnue dans ta niche",
+                "Créer du contenu viral (posts à 100k+ vues)",
+                "Développer une méthodologie propriétaire nommée",
+                "Générer 5+ demandes entrantes par semaine"
+            ],
+            4: [
+                "Être invité comme expert dans des podcasts/événements",
+                "Publier un livre ou guide de référence",
+                "Former d'autres coachs à ta méthodologie",
+                "Avoir une liste d'attente pour tes programmes",
+                "Créer une communauté active autour de ta marque"
+            ],
+            5: [
+                "Maintenir ton statut de leader du marché",
+                "Innover constamment dans tes méthodes",
+                "Développer des partenariats stratégiques",
+                "Créer un écosystème complet autour de ton expertise",
+                "Inspirer la prochaine génération d'entrepreneurs"
+            ]
         };
 
         let scoreActuel = 1;
-        let frequenceActuelle = '2x_mois';
+        let frequenceActuelle = '4x'; // Par défaut 4x pour score 1
+
+        function formatPrice(value) {
+            if (value >= 1000) {
+                const k = value / 1000;
+                // Si c'est un nombre entier, pas de décimale
+                if (k % 1 === 0) {
+                    return k + 'K';
+                } else {
+                    return k.toFixed(1).replace('.', ',') + 'K';
+                }
+            }
+            return value.toLocaleString('fr-FR');
+        }
+
+        function updateFrequenceButtons() {
+            // Mettre à jour l'état des boutons selon le score
+            const buttons = document.querySelectorAll('.btn[data-freq]');
+            buttons.forEach(btn => {
+                const freq = btn.dataset.freq;
+                const data = prixData[scoreActuel][freq];
+                
+                if (!data) {
+                    btn.classList.add('disabled');
+                    btn.disabled = true;
+                } else {
+                    btn.classList.remove('disabled');
+                    btn.disabled = false;
+                }
+            });
+
+            // Pour le score 1, forcer la sélection sur 4x si autre chose est sélectionnée
+            if (scoreActuel === 1 && frequenceActuelle !== '4x') {
+                setFrequence('4x');
+            }
+        }
+
+        function updateChecklist() {
+            const container = document.getElementById('checklist-container');
+            const itemsDiv = document.getElementById('checklist-items');
+            
+            if (scoreActuel < 5) {
+                container.style.display = 'block';
+                itemsDiv.innerHTML = '';
+                
+                checklists[scoreActuel].forEach((item, index) => {
+                    const checklistItem = document.createElement('div');
+                    checklistItem.className = 'checklist-item';
+                    checklistItem.innerHTML = `
+                        <input type="checkbox" id="check-${index}" onchange="saveChecklistProgress()">
+                        <label for="check-${index}">${item}</label>
+                    `;
+                    itemsDiv.appendChild(checklistItem);
+                });
+                
+                // Restaurer l'état des checkboxes
+                loadChecklistProgress();
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function saveChecklistProgress() {
+            const checks = document.querySelectorAll('#checklist-items input[type="checkbox"]');
+            const progress = Array.from(checks).map(check => check.checked);
+            localStorage.setItem(`checklist-score-${scoreActuel}`, JSON.stringify(progress));
+        }
+
+        function loadChecklistProgress() {
+            const saved = localStorage.getItem(`checklist-score-${scoreActuel}`);
+            if (saved) {
+                const progress = JSON.parse(saved);
+                const checks = document.querySelectorAll('#checklist-items input[type="checkbox"]');
+                checks.forEach((check, index) => {
+                    if (progress[index]) {
+                        check.checked = true;
+                    }
+                });
+            }
+        }
+
+        function updateComparison() {
+            const section = document.getElementById('comparison-section');
+            
+            if (scoreActuel < 5 && prixData[scoreActuel][frequenceActuelle]) {
+                section.style.display = 'block';
+                
+                // Niveau actuel
+                document.getElementById('current-level').textContent = `Score ${scoreActuel}`;
+                const currentPrice = prixData[scoreActuel][frequenceActuelle].valide;
+                document.getElementById('current-price-range').textContent = 
+                    `${formatPrice(currentPrice.lower)} € - ${currentPrice.upper ? formatPrice(currentPrice.upper) + ' €' : '♾️'}`;
+                
+                // Niveau potentiel (toujours score 5)
+                document.getElementById('potential-level').textContent = 'Score 5';
+                const potentialPrice = prixData[5]['4x'].valide; // Prix max au score 5
+                document.getElementById('potential-price-range').textContent = 
+                    `${formatPrice(potentialPrice.lower)} € ♾️`;
+                
+                // Calcul du gain potentiel
+                const currentAvg = (currentPrice.lower + (currentPrice.upper || currentPrice.lower)) / 2;
+                const potentialAvg = potentialPrice.lower;
+                const gain = ((potentialAvg - currentAvg) / currentAvg * 100).toFixed(0);
+                document.getElementById('potential-gain').textContent = `+${gain}% de revenus potentiels`;
+            } else {
+                section.style.display = 'none';
+            }
+        }
 
         function setScore(score) {
             scoreActuel = score;
@@ -455,10 +1152,24 @@
             document.getElementById('desc-entreprise').textContent = descriptions[score].entreprise;
             document.getElementById('desc-resultats').textContent = descriptions[score].resultats;
             
+            // Mettre à jour les boutons de fréquence
+            updateFrequenceButtons();
+            
+            // Mettre à jour la checklist
+            updateChecklist();
+            
+            // Mettre à jour la comparaison
+            updateComparison();
+            
             calculerPrix();
         }
 
         function setFrequence(freq) {
+            // Vérifier si cette fréquence est disponible pour ce score
+            if (!prixData[scoreActuel][freq]) {
+                return;
+            }
+            
             frequenceActuelle = freq;
             
             // Mettre à jour les boutons
@@ -470,74 +1181,277 @@
                 }
             });
             
+            // Mettre à jour la comparaison
+            updateComparison();
+            
             calculerPrix();
         }
 
         function calculerPrix() {
-            const score = prixBase[scoreActuel];
-            const multiplicateur = multiplicateurs[frequenceActuelle];
+            const prixScore = prixData[scoreActuel][frequenceActuelle];
             
-            let prixValidation, prixValide;
+            // Mettre à jour le tableau des fréquences
+            document.getElementById('freq-validation').textContent = libellesFrequence.validation[frequenceActuelle];
+            document.getElementById('freq-validee').textContent = libellesFrequence.valide[frequenceActuelle];
             
-            // Gestion spéciale pour score 1 avec 4x/mois
-            if (scoreActuel === 1 && frequenceActuelle === '4x_mois' && score.special4x) {
-                prixValidation = {
-                    min: Math.round(score.special4x.lower * multiplicateur),
-                    max: Math.round(score.special4x.upper * multiplicateur)
-                };
-                prixValide = {
-                    min: Math.round(score.special4x.valide_lower * multiplicateur),
-                    max: Math.round(score.special4x.valide_upper * multiplicateur)
-                };
-                
-                document.getElementById('prix-container').classList.remove('hidden');
-                document.getElementById('alerte-score-1').classList.add('hidden');
-            } else if (scoreActuel === 1) {
-                // Autres fréquences pour score 1
+            // Gérer l'affichage du warning pour score 1
+            const warningDiv = document.getElementById('freq-warning');
+            if (scoreActuel === 1 && frequenceActuelle !== '4x') {
+                warningDiv.textContent = "⚠️ Avec un score d'autorité de 1, tu dois obligatoirement proposer 4x par mois en appels 1-1";
+                warningDiv.classList.remove('hidden');
+            } else {
+                warningDiv.classList.add('hidden');
+            }
+            
+            if (!prixScore) {
+                // Pas de prix pour cette combinaison
                 document.getElementById('prix-container').classList.add('hidden');
-                document.getElementById('alerte-score-1').classList.remove('hidden');
-                return;
+                document.getElementById('alerte-score').classList.remove('hidden');
+                document.getElementById('revenue-section').style.display = 'none';
+                document.getElementById('comparison-section').style.display = 'none';
+                
+                let messageAlerte = '';
+                if (scoreActuel === 1) {
+                    messageAlerte = "Avec un score d'autorité de 1, tu dois obligatoirement proposer 4x par mois en appels 1-1. C'est le minimum requis pour démarrer et construire ta crédibilité.";
+                } else {
+                    messageAlerte = `Cette combinaison n'est pas disponible. Essaye une autre fréquence d'appels.`;
+                }
+                document.getElementById('alerte-message').textContent = messageAlerte;
             } else {
-                // Scores 2-5
-                prixValidation = {
-                    min: score.validation.lower > 0 ? 
-                         Math.round(score.validation.lower * multiplicateur) :
-                         Math.round(score.valide.lower * 0.5 * multiplicateur),
-                    max: score.validation.upper > 0 ? 
-                         Math.round(score.validation.upper * multiplicateur) :
-                         Math.round(score.valide.upper * 0.7 * multiplicateur)
-                };
-                
-                prixValide = {
-                    min: Math.round(score.valide.lower * multiplicateur),
-                    max: Math.round(score.valide.upper * multiplicateur)
-                };
-                
+                // Afficher les prix
                 document.getElementById('prix-container').classList.remove('hidden');
-                document.getElementById('alerte-score-1').classList.add('hidden');
-            }
-            
-            // Afficher les prix
-            if (prixValidation.min === prixValidation.max) {
-                document.getElementById('prix-validation').textContent = 
-                    prixValidation.min.toLocaleString('fr-FR');
-            } else {
-                document.getElementById('prix-validation').textContent = 
-                    prixValidation.min.toLocaleString('fr-FR') + ' - ' + 
-                    prixValidation.max.toLocaleString('fr-FR');
-            }
-            
-            if (prixValide.min === prixValide.max) {
-                document.getElementById('prix-valide').textContent = 
-                    prixValide.min.toLocaleString('fr-FR');
-            } else {
-                document.getElementById('prix-valide').textContent = 
-                    prixValide.min.toLocaleString('fr-FR') + ' - ' + 
-                    prixValide.max.toLocaleString('fr-FR');
+                document.getElementById('alerte-score').classList.add('hidden');
+                
+                // Prix validation
+                let prixValidationText = '';
+                if (prixScore.validation.upper === null) {
+                    // Score 5, 4x par mois : afficher avec symbole infini en vert
+                    prixValidationText = formatPrice(prixScore.validation.lower) + ' € <span class="infinity-icon">♾️</span>';
+                } else {
+                    prixValidationText = formatPrice(prixScore.validation.lower) + ' € - ' + 
+                                       formatPrice(prixScore.validation.upper) + ' €';
+                }
+                
+                // Prix validé
+                let prixValideText = '';
+                if (prixScore.valide.upper === null) {
+                    // Score 5, 4x par mois : afficher avec symbole infini en vert
+                    prixValideText = formatPrice(prixScore.valide.lower) + ' € <span class="infinity-icon">♾️</span>';
+                } else {
+                    prixValideText = formatPrice(prixScore.valide.lower) + ' € - ' + 
+                                    formatPrice(prixScore.valide.upper) + ' €';
+                }
+                
+                document.getElementById('prix-validation').innerHTML = prixValidationText;
+                document.getElementById('prix-valide').innerHTML = prixValideText;
+                
+                // Animation des prix
+                document.getElementById('prix-validation').classList.add('price-animate');
+                document.getElementById('prix-valide').classList.add('price-animate');
+                setTimeout(() => {
+                    document.getElementById('prix-validation').classList.remove('price-animate');
+                    document.getElementById('prix-valide').classList.remove('price-animate');
+                }, 500);
+                
+                // Afficher le calculateur de revenus
+                document.getElementById('revenue-section').style.display = 'block';
+                updateRevenue();
+                
+                // Mettre à jour le lien LinkedIn
+                updateShareLinks();
             }
         }
 
+        // Fonction pour obtenir le prix moyen actuel
+        function getCurrentAveragePrice() {
+            const prixScore = prixData[scoreActuel][frequenceActuelle];
+            if (!prixScore) return 0;
+            
+            // Calculer la moyenne du prix validé
+            const lower = prixScore.valide.lower;
+            const upper = prixScore.valide.upper || lower;
+            return (lower + upper) / 2;
+        }
+
+        // Mettre à jour le calculateur de revenus
+        function updateRevenue() {
+            const nbClients = document.getElementById('clients-slider').value;
+            document.getElementById('nb-clients').textContent = nbClients;
+            
+            const avgPrice = getCurrentAveragePrice();
+            const monthly = avgPrice * nbClients;
+            const quarterly = monthly * 3;
+            const yearly = monthly * 12;
+            
+            document.getElementById('monthly-revenue').textContent = formatPrice(Math.round(monthly)) + ' €';
+            document.getElementById('quarterly-revenue').textContent = formatPrice(Math.round(quarterly)) + ' €';
+            document.getElementById('yearly-revenue').textContent = formatPrice(Math.round(yearly)) + ' €';
+            
+            updateGoal();
+        }
+
+        // Mettre à jour l'objectif de revenus
+        function updateGoal() {
+            const goal = document.getElementById('goal-slider').value;
+            document.getElementById('revenue-goal').textContent = formatPrice(goal) + ' €';
+            
+            const avgPrice = getCurrentAveragePrice();
+            if (avgPrice > 0) {
+                const clientsNeeded = Math.ceil(goal / avgPrice);
+                document.getElementById('clients-needed').textContent = clientsNeeded;
+            }
+        }
+
+        // Copier le lien avec les paramètres
+        function copyLink() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('score', scoreActuel);
+            url.searchParams.set('freq', frequenceActuelle);
+            
+            navigator.clipboard.writeText(url.toString()).then(() => {
+                // Afficher le message de succès
+                const successMsg = document.getElementById('copy-success');
+                successMsg.style.display = 'block';
+                
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            }).catch(() => {
+                // Fallback si la copie échoue
+                alert('Impossible de copier le lien. URL: ' + url.toString());
+            });
+        }
+
+        // Mettre à jour les liens de partage
+        function updateShareLinks() {
+            const prixScore = prixData[scoreActuel][frequenceActuelle];
+            if (!prixScore) return;
+            
+            let prixText = '';
+            if (prixScore.valide.upper === null) {
+                prixText = `${formatPrice(prixScore.valide.lower)} € et plus`;
+            } else {
+                prixText = `${formatPrice(prixScore.valide.lower)} € et ${formatPrice(prixScore.valide.upper)} €`;
+            }
+            
+            const text = `Je peux facturer entre ${prixText} avec un score d'autorité de ${scoreActuel}/5 ! 🚀`;
+            
+            const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(text)}`;
+            document.getElementById('linkedin-share').href = linkedinUrl;
+        }
+
+        // Télécharger une image récapitulative
+        function downloadImage() {
+            // Créer un canvas pour générer l'image
+            const canvas = document.createElement('canvas');
+            canvas.width = 800;
+            canvas.height = 600;
+            const ctx = canvas.getContext('2d');
+            
+            // Fond avec gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#000324');
+            gradient.addColorStop(1, '#0a0a2e');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Bordure verte
+            ctx.strokeStyle = '#01FF00';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+            
+            // Titre
+            ctx.fillStyle = '#01FF00';
+            ctx.font = 'bold 42px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Mon Profil de Tarification', canvas.width / 2, 80);
+            
+            // Score avec étoiles
+            ctx.font = '28px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText('Score d\'Autorité', canvas.width / 2, 150);
+            
+            // Afficher les étoiles
+            ctx.font = '36px Arial';
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += i <= scoreActuel ? '★' : '☆';
+            }
+            ctx.fillStyle = '#01FF00';
+            ctx.fillText(stars, canvas.width / 2, 190);
+            
+            // Fréquence
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '24px Arial';
+            const freqText = frequenceActuelle === 'aucun' ? 'Aucun appel 1-1' : 
+                           frequenceActuelle === '1x' ? '1x par mois' :
+                           frequenceActuelle === '2x' ? '2x par mois' : '4x par mois';
+            ctx.fillText(`Fréquence: ${freqText}`, canvas.width / 2, 260);
+            
+            // Prix
+            const prixScore = prixData[scoreActuel][frequenceActuelle];
+            if (prixScore) {
+                // Titre des prix
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText('Offre Validée', canvas.width / 2, 330);
+                
+                // Prix en grand
+                ctx.fillStyle = '#01FF00';
+                ctx.font = 'bold 48px Arial';
+                let prixText = '';
+                if (prixScore.valide.upper === null) {
+                    // Dessiner le symbole infini manuellement
+                    prixText = `${formatPrice(prixScore.valide.lower)} €`;
+                    ctx.fillText(prixText, canvas.width / 2 - 40, 390);
+                    ctx.font = '48px Arial';
+                    ctx.fillText('∞', canvas.width / 2 + 80, 390);
+                } else {
+                    prixText = `${formatPrice(prixScore.valide.lower)} € - ${formatPrice(prixScore.valide.upper)} €`;
+                    ctx.fillText(prixText, canvas.width / 2, 390);
+                }
+                
+                // Footer
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText('Calculateur de Tarifs Premium', canvas.width / 2, canvas.height - 50);
+            }
+            
+            // Convertir en blob et télécharger
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `mon-profil-tarification-score-${scoreActuel}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+
+        // Charger les paramètres de l'URL au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const urlScore = params.get('score');
+            const urlFreq = params.get('freq');
+            
+            if (urlScore && urlScore >= 1 && urlScore <= 5) {
+                setScore(parseInt(urlScore));
+            }
+            
+            if (urlFreq && ['aucun', '1x', '2x', '4x'].includes(urlFreq)) {
+                // Vérifier si cette fréquence est disponible pour ce score
+                if (prixData[scoreActuel][urlFreq]) {
+                    setFrequence(urlFreq);
+                }
+            }
+        });
+
         // Initialiser
+        updateFrequenceButtons();
+        updateChecklist();
+        updateComparison();
         calculerPrix();
     </script>
 </body>
