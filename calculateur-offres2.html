@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculateur de Tarifs - Score d'Autorité</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {margin:0;padding:0;box-sizing:border-box;}
+        body {
+            background: #000324;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container {max-width: 900px; margin: 0 auto; padding: 2rem 1rem;}
+        h1 {color:#01FF00;font-size:2.5rem;margin-bottom:0.5rem;font-weight: bold;}
+        .subtitle {color: #9CA3AF; margin-bottom:2rem;}
+        .mb-8 {margin-bottom:2rem;}
+        .card {
+            background: #111827;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #374151;
+        }
+        /* ===== SCORE BUTTONS ===== */
+        .score-buttons {display:flex;gap:0.5rem;margin-bottom:1rem;}
+        .btn {
+            flex:1;padding:0.7rem 1rem;border-radius:0.375rem;font-weight:600;
+            border:none;cursor:pointer;transition:all 0.2s;
+            background:#374151;color:#9CA3AF;position:relative;
+        }
+        .btn:hover {background:#4B5563;transform:translateY(-2px);}
+        .btn.active {background:#01FF00;color:#000324;}
+        .btn.disabled {opacity:0.5;cursor:not-allowed;background:#1F2937;}
+        .btn.disabled:hover {background:#1F2937;}
+        /* ===== SHARE BUTTONS ===== */
+        .share-section {
+            background: #1F2937;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        .share-buttons {
+            display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;
+        }
+        .share-btn {
+            padding: 0.8rem 1.4rem;
+            border-radius: 0.375rem;
+            background: #1F2937;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.22s cubic-bezier(.47,1.64,.41,.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            white-space: nowrap;
+            min-width: 160px;
+            justify-content: center;
+            box-shadow: 0 0 0 rgba(1,255,0,0);
+        }
+        .share-btn svg {flex-shrink:0;width:18px;height:18px;}
+        .share-btn:focus {
+            outline: 2px solid #01FF00;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(1,255,0,0.19);
+        }
+        .share-btn:hover, .share-btn:active {
+            background: #01FF00;
+            color: #000324;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 0 10px #01FF00, 0 2px 16px #00032480;
+        }
+        .share-btn.main {background:#01FF00;color:#000324;font-weight:700;border:2px solid #01FF00;}
+        .share-btn.main:hover, .share-btn.main:active {background:#0ED100;color:#000324;}
+        @media (max-width: 700px) {
+            .share-buttons {flex-direction:column;gap:0.7rem;}
+            .share-btn {width:100%;min-width:0;font-size:1.08rem;min-height:54px;}
+        }
+        /* ===== TOAST ===== */
+        .custom-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 36px;
+            transform: translateX(-50%);
+            min-width: 230px;
+            padding: 1rem 2rem;
+            background: #01FF00;
+            color: #000324;
+            font-weight: 700;
+            border-radius: 8px;
+            z-index: 99999;
+            text-align: center;
+            font-size: 1rem;
+            box-shadow: 0 0 18px #01FF0080, 0 4px 32px #000324cc;
+            animation: toast-appear 0.4s cubic-bezier(.4,2.1,.52,1.08);
+        }
+        @keyframes toast-appear {0%{opacity:0;transform:translateX(-50%)translateY(50px);}100%{opacity:1;transform:translateX(-50%)translateY(0);}}
+        .custom-toast.error {background:#DC2626;color:#fff;}
+        /* ===== AUTRES ELEMENTS ===== */
+        .price-display {font-size:1.9rem;font-weight:bold;margin:1rem 0;transition:all 0.5s;}
+        .card .small-text {font-size:0.92rem;color:#9CA3AF;}
+        .brand-green {color:#01FF00;}
+        .infinity-icon {color:#01FF00;font-size:1.2rem;margin-left:0.2em;}
+        .flex {display:flex;align-items:center;}
+        .flex-center {justify-content:center;}
+        .mb-4 {margin-bottom:1rem;}
+        .mb-6 {margin-bottom:1.5rem;}
+        .hidden {display:none;}
+        .subtitle {font-size:1.1rem;}
+        /* Responsive titre */
+        @media (max-width:700px){h1{font-size:1.5rem;}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-center mb-8">
+        <h1>Calculateur de Tarifs Premium</h1>
+        <p class="subtitle">Détermine tes prix optimaux selon ton niveau d'autorité</p>
+    </div>
+    <!-- SCORE AUTORITÉ -->
+    <div class="card">
+        <div class="flex flex-center mb-4"><span>Score actuel&nbsp;:</span>
+            <span class="price-display brand-green" id="current-score">1/5</span>
+        </div>
+        <div class="score-buttons">
+            <button class="btn active" data-score="1" onclick="setScore(1)">1</button>
+            <button class="btn" data-score="2" onclick="setScore(2)">2</button>
+            <button class="btn" data-score="3" onclick="setScore(3)">3</button>
+            <button class="btn" data-score="4" onclick="setScore(4)">4</button>
+            <button class="btn" data-score="5" onclick="setScore(5)">5</button>
+        </div>
+        <p class="small-text flex-center" style="margin-top:0.5rem;">💡 Score 3 = Sweet spot pour la plupart des entrepreneurs</p>
+    </div>
+    <!-- FRÉQUENCE APPELS -->
+    <div class="card">
+        <div class="flex flex-center mb-4">
+            <span>Fréquence des Appels 1-1 :</span>
+        </div>
+        <div class="score-buttons" id="freq-buttons">
+            <button class="btn" data-freq="aucun" onclick="setFrequence('aucun')">Aucun</button>
+            <button class="btn" data-freq="1x" onclick="setFrequence('1x')">1x/mois</button>
+            <button class="btn active" data-freq="2x" onclick="setFrequence('2x')">2x/mois ✓</button>
+            <button class="btn" data-freq="4x" onclick="setFrequence('4x')">4x/mois</button>
+        </div>
+    </div>
+    <!-- AFFICHAGE PRIX -->
+    <div id="prix-container">
+        <div class="card">
+            <h3>Offre de Validation</h3>
+            <div class="flex flex-center mb-4">
+                <span class="price-display brand-green" id="prix-validation">-</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Offre Validée</h3>
+            <div class="flex flex-center mb-4">
+                <span class="price-display brand-green" id="prix-valide">-</span>
+            </div>
+        </div>
+    </div>
+    <!-- BOUTONS DE PARTAGE -->
+    <div class="share-section">
+        <p class="small-text mb-4">Partage ton profil de tarification :</p>
+        <div class="share-buttons">
+            <a class="share-btn main" id="linkedin-share" href="#" target="_blank" rel="noopener noreferrer" aria-label="Partager sur LinkedIn">
+                <!-- Icône LinkedIn -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                Partager sur LinkedIn
+            </a>
+            <button class="share-btn" onclick="copyLink()" aria-label="Copier le lien">
+                <!-- Icône copie -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+                Copier le lien
+            </button>
+            <button class="share-btn" onclick="downloadImage()" aria-label="Télécharger l'image">
+                <!-- Icône téléchargement -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Télécharger l'image
+            </button>
+        </div>
+        <div id="share-toast" class="custom-toast" style="display:none;"></div>
+    </div>
+</div>
+<script>
+/* ======= DONNÉES DE PRIX (personnalise selon ton business) ======= */
+const prixData = {
+    1: {'aucun': null,'1x': null,'2x': null,'4x': {validation: {lower: 1000, upper: 2800},valide: {lower: 2000, upper: 4000}}},
+    2: {'aucun': null,'1x': null,'2x': {validation: {lower: 1000, upper: 2800},valide: {lower: 2000, upper: 4000}},'4x': {validation: {lower: 2000, upper: 4200},valide: {lower: 4000, upper: 6000}}},
+    3: {'aucun': {validation: {lower: 1000, upper: 2800},valide: {lower: 2000, upper: 4000}},'1x': {validation: {lower: 2000, upper: 4200},valide: {lower: 4000, upper: 6000}},'2x': {validation: {lower: 3000, upper: 5600},valide: {lower: 6000, upper: 8000}},'4x': {validation: {lower: 4000, upper: 7000},valide: {lower: 8000, upper: 10000}}},
+    4: {'aucun': {validation: {lower: 2000, upper: 5600},valide: {lower: 4000, upper: 8000}},'1x': {validation: {lower: 3000, upper: 7000},valide: {lower: 6000, upper: 10000}},'2x': {validation: {lower: 4000, upper: 8400},valide: {lower: 8000, upper: 12000}},'4x': {validation: {lower: 6000, upper: 16800},valide: {lower: 12000, upper: 24000}}},
+    5: {'aucun': {validation: {lower: 5000, upper: 10000},valide: {lower: 10000, upper: 15000}},'1x': {validation: {lower: 7500, upper: 17500},valide: {lower: 15000, upper: 25000}},'2x': {validation: {lower: 12500, upper: 25000},valide: {lower: 25000, upper: 35000}},'4x': {validation: {lower: 20000, upper: null},valide: {lower: 40000, upper: null}}}
+};
+let scoreActuel = 1;
+let frequenceActuelle = '2x';
+
+function formatPrice(value) {
+    if (value >= 1000) {
+        const k = value / 1000;
+        if (k % 1 === 0) return k + 'K';
+        else return k.toFixed(1).replace('.', ',') + 'K';
+    }
+    return value.toLocaleString('fr-FR');
+}
+function setScore(score) {
+    scoreActuel = score;
+    // Activer bouton
+    document.querySelectorAll('.btn[data-score]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.score == score);
+    });
+    document.getElementById('current-score').textContent = score + '/5';
+    // Forcer la fréquence si non dispo
+    updateFrequenceButtons();
+    updatePrix();
+    updateShareLinks();
+}
+function setFrequence(freq) {
+    if (!prixData[scoreActuel][freq]) return;
+    frequenceActuelle = freq;
+    document.querySelectorAll('.btn[data-freq]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.freq == freq);
+    });
+    updatePrix();
+    updateShareLinks();
+}
+function updateFrequenceButtons() {
+    const buttons = document.querySelectorAll('.btn[data-freq]');
+    buttons.forEach(btn => {
+        const freq = btn.dataset.freq;
+        const data = prixData[scoreActuel][freq];
+        if (!data) {
+            btn.classList.add('disabled'); btn.disabled = true;
+        } else {
+            btn.classList.remove('disabled'); btn.disabled = false;
+        }
+    });
+    // Si la fréquence active n'existe plus, force la première dispo
+    if (!prixData[scoreActuel][frequenceActuelle]) {
+        const available = Object.keys(prixData[scoreActuel]).find(f => prixData[scoreActuel][f]);
+        setFrequence(available || '2x');
+    }
+}
+function updatePrix() {
+    const prixScore = prixData[scoreActuel][frequenceActuelle];
+    let prixValidationText = '-';
+    let prixValideText = '-';
+    if (prixScore) {
+        // Validation
+        if (prixScore.validation.upper === null) {
+            prixValidationText = formatPrice(prixScore.validation.lower) + ' € <span class="infinity-icon">♾️</span>';
+        } else {
+            prixValidationText = formatPrice(prixScore.validation.lower) + ' € - ' + formatPrice(prixScore.validation.upper) + ' €';
+        }
+        // Validée
+        if (prixScore.valide.upper === null) {
+            prixValideText = formatPrice(prixScore.valide.lower) + ' € <span class="infinity-icon">♾️</span>';
+        } else {
+            prixValideText = formatPrice(prixScore.valide.lower) + ' € - ' + formatPrice(prixScore.valide.upper) + ' €';
+        }
+    }
+    document.getElementById('prix-validation').innerHTML = prixValidationText;
+    document.getElementById('prix-valide').innerHTML = prixValideText;
+}
+// TOAST
+function showToast(message, success = true) {
+    const toast = document.getElementById('share-toast');
+    toast.textContent = message;
+    toast.className = 'custom-toast' + (success ? '' : ' error');
+    toast.style.display = 'block';
+    clearTimeout(window.toastTimeout);
+    window.toastTimeout = setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2200);
+}
+// COPIE LIEN
+function copyLink() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('score', scoreActuel);
+    url.searchParams.set('freq', frequenceActuelle);
+    navigator.clipboard.writeText(url.toString())
+        .then(() => showToast("✓ Lien copié, tu peux le partager !"))
+        .catch(() => showToast("Erreur, copie manuelle !", false));
+}
+// LIEN LINKEDIN
+function updateShareLinks() {
+    const prixScore = prixData[scoreActuel][frequenceActuelle];
+    if (!prixScore) return;
+    let prixText = '';
+    if (prixScore.valide.upper === null) {
+        prixText = `${formatPrice(prixScore.valide.lower)} € et plus`;
+    } else {
+        prixText = `${formatPrice(prixScore.valide.lower)} € et ${formatPrice(prixScore.valide.upper)} €`;
+    }
+    const text = `Je peux facturer entre ${prixText} avec un score d'autorité de ${scoreActuel}/5 ! 🚀`;
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(text)}`;
+    document.getElementById('linkedin-share').href = linkedinUrl;
+}
+// TELECHARGER IMAGE
+function downloadImage() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 800; canvas.height = 600;
+    const ctx = canvas.getContext('2d');
+    // Fond
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, '#000324'); gradient.addColorStop(1, '#0a0a2e');
+    ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Bordure verte
+    ctx.strokeStyle = '#01FF00'; ctx.lineWidth = 4;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+    // Titre
+    ctx.fillStyle = '#01FF00'; ctx.font = 'bold 42px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('Mon Profil de Tarification', canvas.width / 2, 80);
+    // Score étoiles
+    ctx.font = '28px Arial'; ctx.fillStyle = '#FFF'; ctx.fillText('Score d\'Autorité', canvas.width / 2, 150);
+    ctx.font = '36px Arial';
+    let stars = '';
+    for (let i = 1; i <= 5; i++) stars += i <= scoreActuel ? '★' : '☆';
+    ctx.fillStyle = '#01FF00'; ctx.fillText(stars, canvas.width / 2, 190);
+    // Fréquence
+    ctx.fillStyle = '#FFF'; ctx.font = '24px Arial';
+    const freqText = frequenceActuelle === 'aucun' ? 'Aucun appel 1-1' : 
+                   frequenceActuelle === '1x' ? '1x par mois' :
+                   frequenceActuelle === '2x' ? '2x par mois' : '4x par mois';
+    ctx.fillText('Fréquence: ' + freqText, canvas.width / 2, 260);
+    // Prix
+    const prixScore = prixData[scoreActuel][frequenceActuelle];
+    if (prixScore) {
+        ctx.font = '20px Arial'; ctx.fillStyle = '#FFF';
+        ctx.fillText('Offre Validée', canvas.width / 2, 330);
+        ctx.fillStyle = '#01FF00'; ctx.font = 'bold 48px Arial';
+        if (prixScore.valide.upper === null) {
+            const prixText = formatPrice(prixScore.valide.lower) + ' €';
+            const textWidth = ctx.measureText(prixText).width;
+            ctx.fillText(prixText, canvas.width / 2 - 30, 390);
+            ctx.font = '48px Arial'; ctx.fillText('∞', canvas.width / 2 + textWidth / 2 + 10, 390);
+        } else {
+            const prixText = formatPrice(prixScore.valide.lower) + ' € - ' + formatPrice(prixScore.valide.upper) + ' €';
+            ctx.fillText(prixText, canvas.width / 2, 390);
+        }
+        ctx.font = '16px Arial'; ctx.fillStyle = '#FFF';
+        ctx.fillText('Calculateur de Tarifs Premium', canvas.width / 2, canvas.height - 50);
+    }
+    try {
+        canvas.toBlob(function(blob) {
+            if (blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'mon-profil-tarification-score-' + scoreActuel + '.png';
+                a.style.display = 'none';
+                document.body.appendChild(a); a.click();
+                setTimeout(() => {document.body.removeChild(a);URL.revokeObjectURL(url);}, 100);
+                showToast("Image téléchargée !");
+            } else showToast("Erreur lors de la création de l'image.", false);
+        }, 'image/png');
+    } catch (error) {
+        showToast("Erreur, essaye un autre navigateur.", false);
+    }
+}
+// INITIALISATION
+setScore(1); setFrequence('2x'); updateFrequenceButtons(); updatePrix(); updateShareLinks();
+</script>
+</body>
+</html>
